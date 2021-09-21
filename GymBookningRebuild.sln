@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymBookning.FrontEnd", "GymBookning.FrontEnd\GymBookning.FrontEnd.csproj", "{BFF5B239-4B58-4839-9109-1A6DD517E152}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GymBooking.Data", "Data\GymBooking.Data.csproj", "{02540477-CBAA-49AF-8CE7-04BCB9CB7E57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymBooking.Data", "Data\GymBooking.Data.csproj", "{02540477-CBAA-49AF-8CE7-04BCB9CB7E57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{22BDE1A0-F657-4883-8673-B8C5B8501EEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{22BDE1A0-F657-4883-8673-B8C5B8501EEC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymBooking.Front", "GymBooking.Front\GymBooking.Front.csproj", "{54D832D2-C28E-4599-9D4F-F5DC28B33985}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BFF5B239-4B58-4839-9109-1A6DD517E152}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BFF5B239-4B58-4839-9109-1A6DD517E152}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BFF5B239-4B58-4839-9109-1A6DD517E152}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BFF5B239-4B58-4839-9109-1A6DD517E152}.Release|Any CPU.Build.0 = Release|Any CPU
 		{02540477-CBAA-49AF-8CE7-04BCB9CB7E57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{02540477-CBAA-49AF-8CE7-04BCB9CB7E57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02540477-CBAA-49AF-8CE7-04BCB9CB7E57}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{22BDE1A0-F657-4883-8673-B8C5B8501EEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22BDE1A0-F657-4883-8673-B8C5B8501EEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22BDE1A0-F657-4883-8673-B8C5B8501EEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54D832D2-C28E-4599-9D4F-F5DC28B33985}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54D832D2-C28E-4599-9D4F-F5DC28B33985}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54D832D2-C28E-4599-9D4F-F5DC28B33985}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54D832D2-C28E-4599-9D4F-F5DC28B33985}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
