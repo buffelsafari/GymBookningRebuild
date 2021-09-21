@@ -12,7 +12,7 @@ namespace GymBooking.Data.Data
 {
     public class GymDbContext: IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
-        DbSet<GymClass> GymClasses { get; set; }
+        public DbSet<GymClass> GymClasses { get; set; }
         public GymDbContext(DbContextOptions<GymDbContext> options) : base(options)
         {
         }
