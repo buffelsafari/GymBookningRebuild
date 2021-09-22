@@ -9,15 +9,16 @@ namespace GymBooking.Core.Services.GymClassService
     public interface IGymClassService
     {
         IQueryable<GymClassData> GetGymClassItems(string userId);
-
-        Task<GymClassData> GetGymClass(int gymClassId);
-
+        IQueryable<GymClassUserData> GetBookedUsers(int gymClassId);
+        
+        Task<GymClassData> GetGymClassAsync(int gymClassId);
         Task<bool> IsBooked(string userId, int gymClassId);
         Task<bool> Toggle(string userId, int gymClassId);
 
-        IQueryable<GymClassUserData> GetBookedUsers(int gymClassId);
+        
 
-        Task AddAsync(GymClassCreationData inputData);
+        void Add(GymClassCreationData inputData);
+        void Update(GymClassUpdateData inputData);
 
         Task SaveChangesAsync();
         bool GymClassExists(int gymClassId);

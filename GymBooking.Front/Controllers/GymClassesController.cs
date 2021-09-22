@@ -64,7 +64,7 @@ namespace GymBooking.Front.Controllers
                 return NotFound();
             }
                         
-            var gymClass=await gymClassService.GetGymClass((int)id);
+            var gymClass=await gymClassService.GetGymClassAsync((int)id);
             if (gymClass==null)
             {
                 return NotFound();
@@ -118,7 +118,7 @@ namespace GymBooking.Front.Controllers
         {
             if (ModelState.IsValid)
             {
-                await gymClassService.AddAsync(new GymClassCreationData 
+                gymClassService.Add(new GymClassCreationData 
                 { 
                     Name=modelView.Name,
                     StartTime=modelView.StartTime,
@@ -139,12 +139,22 @@ namespace GymBooking.Front.Controllers
                 return NotFound();
             }
 
-            var gymClass = await context.GymClasses.FindAsync(id);
+            var gymClass=await gymClassService.GetGymClassAsync((int)id);
+            //var gymClass = await context.GymClasses.FindAsync(id);
             if (gymClass == null)
             {
                 return NotFound();
             }
-            return View(gymClass);
+            var model = new GymClassUpdateModelView 
+            { 
+                Id=gymClass.Id,
+                Name=gymClass.Name,
+                StartTime=gymClass.StartTime,
+                Duration=gymClass.Duration,
+                Description=gymClass.Description
+            };
+
+            return View(model);
         }
 
         // POST: GymClasses/Edit/5
@@ -152,9 +162,9 @@ namespace GymBooking.Front.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartTime,Duration,Description")] GymClass gymClass)
+        public async Task<IActionResult> Edit(int id, GymClassUpdateModelView modelView)
         {
-            if (id != gymClass.Id)
+            if (id != modelView.Id)
             {
                 return NotFound();
             }
@@ -163,12 +173,19 @@ namespace GymBooking.Front.Controllers
             {
                 try
                 {
-                    context.Update(gymClass);
-                    await context.SaveChangesAsync();
+                    gymClassService.Update(new GymClassUpdateData 
+                    { 
+                        Id=modelView.Id,
+                        Name=modelView.Name,
+                        StartTime=modelView.StartTime,
+                        Duration=modelView.Duration,
+                        Description=modelView.Description
+                    });
+                    await gymClassService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!gymClassService.GymClassExists(gymClass.Id))
+                    if (!gymClassService.GymClassExists(modelView.Id))
                     {
                         return NotFound();
                     }
@@ -179,7 +196,7 @@ namespace GymBooking.Front.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(gymClass);
+            return View(modelView);
         }
 
         // GET: GymClasses/Delete/5

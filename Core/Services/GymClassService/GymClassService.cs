@@ -76,7 +76,7 @@ namespace GymBooking.Core.Services.GymClassService
             return context.GymClasses.Any(e => e.Id == gymClassId);
         }
 
-        public async Task<GymClassData> GetGymClass(int gymClassId)
+        public async Task<GymClassData> GetGymClassAsync(int gymClassId)
         {
             var gc=await context.GymClasses.FindAsync(gymClassId);
             return new GymClassData
@@ -89,10 +89,22 @@ namespace GymBooking.Core.Services.GymClassService
             };
         }
 
-        public async Task AddAsync(GymClassCreationData inputData)
+        public void Add(GymClassCreationData inputData)
         {
-            await context.GymClasses.AddAsync(new GymClass
+            context.GymClasses.Add(new GymClass
             {
+                Name=inputData.Name,
+                StartTime=inputData.StartTime,
+                Duration=inputData.Duration,
+                Description=inputData.Description
+            });
+        }
+
+        public void Update(GymClassUpdateData inputData)
+        {
+            context.GymClasses.Update(new GymClass
+            {
+                Id=inputData.Id,
                 Name=inputData.Name,
                 StartTime=inputData.StartTime,
                 Duration=inputData.Duration,
