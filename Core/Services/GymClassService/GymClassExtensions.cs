@@ -8,7 +8,7 @@ namespace GymBooking.Core.Services.GymClassService
 {
     public static class GymClassExtensions
     {
-        public static IQueryable<GymClassItem> From(this IQueryable<GymClassItem> query, DateTime from)
+        public static IQueryable<GymClassData> From(this IQueryable<GymClassData> query, DateTime from)
         {
             return query.Where(c => c.StartTime > from);
         }

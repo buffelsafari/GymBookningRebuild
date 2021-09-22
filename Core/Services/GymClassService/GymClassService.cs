@@ -19,9 +19,9 @@ namespace GymBooking.Core.Services.GymClassService
             this.context = context;
         }
 
-        public IQueryable<GymClassItem> GetGymClassItems(string userId)
+        public IQueryable<GymClassData> GetGymClassItems(string userId)
         {
-            return context.GymClasses.Select(c => new GymClassItem
+            return context.GymClasses.Select(c => new GymClassData
             {
 
                 Id = c.Id,
@@ -37,6 +37,7 @@ namespace GymBooking.Core.Services.GymClassService
         { 
             return await context.ApplicationUsersGymClasses.FindAsync(userId, gymClassId) !=default;
         }
+
 
         public async Task<bool> Toggle(string userId, int gymClassId) 
         {
@@ -56,6 +57,36 @@ namespace GymBooking.Core.Services.GymClassService
                 });
                 return true;
             }            
+        }
+
+
+        public IQueryable<GymClassUserData> GetBookedUsers(int gymClassId)
+        {
+            return context.Users.Where(u => u.GymClasses.Any(c => c.GymClassId == gymClassId))
+                .Select(s => new GymClassUserData
+                {
+                    Id = s.Id,
+                    FirstName = s.FirstName,
+                    LastName = s.LastName
+                });
+        }
+
+        public bool GymClassExists(int gymClassId)
+        {
+            return context.GymClasses.Any(e => e.Id == gymClassId);
+        }
+
+        public async Task<GymClassData> GetGymClass(int gymClassId)
+        {
+            var gc=await context.GymClasses.FindAsync(gymClassId);
+            return new GymClassData
+            {
+                Id=gc.Id,
+                Name=gc.Name,
+                Description=gc.Description,
+                Duration=gc.Duration,
+                StartTime=gc.StartTime,
+            };
         }
     }
 }

@@ -58,22 +58,70 @@ namespace GymBooking.Front.Controllers
         }       
 
         // GET: GymClasses/Details/5
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var gymClass = await context.GymClasses
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (gymClass == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return View(gymClass);
+        //}
+
+
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
-
-            var gymClass = await context.GymClasses
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (gymClass == null)
+                        
+            var gymClass=await gymClassService.GetGymClass((int)id);
+            if (gymClass==null)
             {
                 return NotFound();
             }
+                        
+            var userQ=gymClassService.GetBookedUsers((int)id)
+            
+                .Select(s=>new GymClassDetailsItemModelView 
+                { 
+                    UserId=s.Id,
+                    FirstName=s.FirstName,
+                    LastName=s.LastName
+                });
 
-            return View(gymClass);
+            
+
+            GymClassDetailsModelView model = new GymClassDetailsModelView
+            {
+                Id = gymClass.Id,
+                Name = gymClass.Name,
+                StartTime = gymClass.StartTime,
+                Duration = gymClass.Duration,
+                Description = gymClass.Description,
+                Users = await userQ.ToListAsync()
+
+            };
+
+
+            return View(model);
         }
+
+
+
+
+
+
+
 
         // GET: GymClasses/Create
         public IActionResult Create()
@@ -134,7 +182,7 @@ namespace GymBooking.Front.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!GymClassExists(gymClass.Id))
+                    if (!gymClassService.GymClassExists(gymClass.Id))
                     {
                         return NotFound();
                     }
@@ -177,10 +225,10 @@ namespace GymBooking.Front.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool GymClassExists(int id)
-        {
-            return context.GymClasses.Any(e => e.Id == id);
-        }
+        //private bool GymClassExists(int id)
+        //{
+        //    return context.GymClasses.Any(e => e.Id == id);
+        //}
 
 
 

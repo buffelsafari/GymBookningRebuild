@@ -8,9 +8,15 @@ namespace GymBooking.Core.Services.GymClassService
 {
     public interface IGymClassService
     {
-        IQueryable<GymClassItem> GetGymClassItems(string userId);
+        IQueryable<GymClassData> GetGymClassItems(string userId);
+
+        Task<GymClassData> GetGymClass(int gymClassId);
 
         Task<bool> IsBooked(string userId, int gymClassId);
         Task<bool> Toggle(string userId, int gymClassId);
+
+        IQueryable<GymClassUserData> GetBookedUsers(int gymClassId);
+
+        bool GymClassExists(int gymClassId);
     }
 }

@@ -15,7 +15,8 @@ namespace GymBooking.Data.Data
     {
         public DbSet<GymClass> GymClasses { get; set; }
         public DbSet<ApplicationUserGymClass> ApplicationUsersGymClasses { get; set; }
-        
+
+                
         public GymDbContext(DbContextOptions<GymDbContext> options) : base(options)
         {
         }
