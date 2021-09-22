@@ -19,6 +19,7 @@ namespace GymBooking.Core.Services.GymClassService
 
         void Add(GymClassCreationData inputData);
         void Update(GymClassUpdateData inputData);
+        Task RemoveAsync(int gymClassId);
 
         Task SaveChangesAsync();
         bool GymClassExists(int gymClassId);

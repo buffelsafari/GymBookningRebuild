@@ -112,6 +112,12 @@ namespace GymBooking.Core.Services.GymClassService
             });
         }
 
+        public async Task RemoveAsync(int gymClassId)
+        {
+            var gc=await context.GymClasses.FindAsync(gymClassId);
+            context.GymClasses.Remove(gc);
+        }
+
         public async Task SaveChangesAsync()
         {
             await context.SaveChangesAsync();

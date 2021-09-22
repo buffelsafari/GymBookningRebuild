@@ -18,14 +18,12 @@ namespace GymBooking.Front.Controllers
    
 
     public class GymClassesController : Controller
-    {
-        private readonly GymDbContext context;
+    {        
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IGymClassService gymClassService;
 
-        public GymClassesController(GymDbContext context, UserManager<ApplicationUser> userManager, IGymClassService gymClassService)
-        {
-            this.context = context;
+        public GymClassesController(UserManager<ApplicationUser> userManager, IGymClassService gymClassService)
+        {            
             this.userManager = userManager;
             this.gymClassService = gymClassService;
         }
@@ -36,7 +34,7 @@ namespace GymBooking.Front.Controllers
             var userId = userManager.GetUserId(User);            
 
             var gymClasses=gymClassService.GetGymClassItems(userId)
-                .From(DateTime.Now)
+                .From(DateTime.Now, true)
                 .Select(i=> new GymClassIndexItemModelView 
                 {
                     Id = i.Id,
@@ -54,9 +52,44 @@ namespace GymBooking.Front.Controllers
             };
 
             return View(model);            
-        }       
-        
-        
+        }
+
+
+        public async Task<IActionResult> History(GymClassIndexModelView inputView)
+        {
+            Debug.WriteLine("hello from history "+inputView.ViewHistory);
+
+            var userId = userManager.GetUserId(User);
+
+            var gymClasses = gymClassService.GetGymClassItems(userId)
+                .From(DateTime.Now, !inputView.ViewHistory)
+                .Select(i => new GymClassIndexItemModelView
+                { 
+                    Id = i.Id,
+                    Name = i.Name,
+                    StartTime = i.StartTime,
+                    Duration = i.Duration,
+                    Description = i.Description,
+                    IsBooked = i.IsBooked
+                });
+
+            var model = new GymClassIndexModelView
+            {
+                ViewHistory = inputView.ViewHistory,
+                GymClasses = await gymClasses.ToListAsync()
+            };
+
+            return View(nameof(Index), model);
+        }
+
+
+
+
+
+
+
+
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -206,15 +239,24 @@ namespace GymBooking.Front.Controllers
             {
                 return NotFound();
             }
-
-            var gymClass = await context.GymClasses
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (gymClass == null)
+            
+            var gymClass = await gymClassService.GetGymClassAsync((int)id);                
+            if (gymClass==null)
             {
                 return NotFound();
             }
 
-            return View(gymClass);
+            var model = new GymClassDeleteModelView
+            { 
+                Id=gymClass.Id,
+                Name=gymClass.Name,
+                StartTime=gymClass.StartTime,
+                Duration=gymClass.Duration,
+                Description=gymClass.Description
+            };
+
+
+            return View(model);
         }
 
         // POST: GymClasses/Delete/5
@@ -222,9 +264,13 @@ namespace GymBooking.Front.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var gymClass = await context.GymClasses.FindAsync(id);
-            context.GymClasses.Remove(gymClass);
-            await context.SaveChangesAsync();
+            //var gymClass = await context.GymClasses.FindAsync(id);
+            
+            //context.GymClasses.Remove(gymClass);
+
+            await gymClassService.RemoveAsync(id);
+            
+            await gymClassService.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -246,7 +292,7 @@ namespace GymBooking.Front.Controllers
 
             await gymClassService.Toggle(userId, (int)id);            
 
-            await context.SaveChangesAsync();
+            await gymClassService.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
