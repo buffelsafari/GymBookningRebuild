@@ -53,30 +53,10 @@ namespace GymBooking.Front.Controllers
                 GymClasses = await gymClasses.ToListAsync()
             };
 
-            return View(model);
-            
+            return View(model);            
         }       
-
-        // GET: GymClasses/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var gymClass = await context.GymClasses
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (gymClass == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(gymClass);
-        //}
-
-
-
+        
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -134,15 +114,21 @@ namespace GymBooking.Front.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,StartTime,Duration,Description")] GymClass gymClass)
+        public async Task<IActionResult> Create(GymClassCreateModelView modelView)
         {
             if (ModelState.IsValid)
             {
-                context.Add(gymClass);
-                await context.SaveChangesAsync();
+                await gymClassService.AddAsync(new GymClassCreationData 
+                { 
+                    Name=modelView.Name,
+                    StartTime=modelView.StartTime,
+                    Duration=modelView.Duration,
+                    Description=modelView.Description
+                });                
+                await gymClassService.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(gymClass);
+            return View(modelView);
         }
 
         // GET: GymClasses/Edit/5

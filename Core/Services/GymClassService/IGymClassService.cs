@@ -17,6 +17,9 @@ namespace GymBooking.Core.Services.GymClassService
 
         IQueryable<GymClassUserData> GetBookedUsers(int gymClassId);
 
+        Task AddAsync(GymClassCreationData inputData);
+
+        Task SaveChangesAsync();
         bool GymClassExists(int gymClassId);
     }
 }

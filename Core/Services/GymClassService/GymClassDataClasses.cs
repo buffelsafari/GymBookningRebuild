@@ -23,5 +23,13 @@ namespace GymBooking.Core.Services.GymClassService
         public string LastName { get; set; }
     }
 
+    public class GymClassCreationData
+    {
+        public string Name { get; set; }
+        public DateTime StartTime { get; set; }
+        public TimeSpan Duration { get; set; }
+        public string Description { get; set; }
+    }
+
 
 }

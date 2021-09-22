@@ -88,5 +88,21 @@ namespace GymBooking.Core.Services.GymClassService
                 StartTime=gc.StartTime,
             };
         }
+
+        public async Task AddAsync(GymClassCreationData inputData)
+        {
+            await context.GymClasses.AddAsync(new GymClass
+            {
+                Name=inputData.Name,
+                StartTime=inputData.StartTime,
+                Duration=inputData.Duration,
+                Description=inputData.Description
+            });
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await context.SaveChangesAsync();
+        }
     }
 }
