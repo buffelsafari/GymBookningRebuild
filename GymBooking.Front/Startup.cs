@@ -1,3 +1,4 @@
+using GymBooking.Core.Services.GymClassService;
 using GymBooking.Data;
 using GymBooking.Data.Data;
 using GymBooking.Data.Entities;
@@ -38,6 +39,7 @@ namespace GymBooking.Front
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<GymDbContext>();
 
+            services.AddScoped<IGymClassService, GymClassService>();
             
             services.AddControllersWithViews();
         }
@@ -68,7 +70,7 @@ namespace GymBooking.Front
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=GymClasses}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

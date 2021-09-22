@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GymBooking.Data.Entities.GymClass>
+﻿@model GymBooking.Front.Models.ViewModels.GymClasses.GymClassIndexModelView
 
 @{
     ViewData["Title"] = "Index";
@@ -17,7 +17,7 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.StartTime)
-            </th>
+            </th>            
             <th>
                 @Html.DisplayNameFor(model => model.Duration)
             </th>
@@ -28,7 +28,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.GymClasses) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -41,11 +41,29 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
-            </td>
+            </td>            
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                @if (@User.Identity.IsAuthenticated)
+                {
+                    if (@User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a><span>|</span>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a><span>|</span>
+                    }
+
+                    <a asp-action="BookingToggle" asp-route-id="@item.Id">
+                        @if (item.IsBooked)
+                        {
+                            <span>Unbook</span>
+                        }
+                        else
+                        {
+                            <span>Book</span>
+                        }
+                    </a><span>|</span>
+                }
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+
             </td>
         </tr>
 }

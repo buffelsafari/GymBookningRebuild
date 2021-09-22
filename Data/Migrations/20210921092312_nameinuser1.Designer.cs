@@ -4,14 +4,16 @@ using GymBooking.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GymBooking.Data.Migrations
 {
     [DbContext(typeof(GymDbContext))]
-    partial class GymDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210921092312_nameinuser1")]
+    partial class nameinuser1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,7 +107,7 @@ namespace GymBooking.Data.Migrations
 
                     b.HasIndex("GymClassId");
 
-                    b.ToTable("ApplicationUsersGymClasses");
+                    b.ToTable("ApplicationUserGymClass");
                 });
 
             modelBuilder.Entity("GymBooking.Data.Entities.GymClass", b =>

@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GymBooking.Data", "Data\GymBooking.Data.csproj", "{02540477-CBAA-49AF-8CE7-04BCB9CB7E57}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{22BDE1A0-F657-4883-8673-B8C5B8501EEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GymBooking.Core", "Core\GymBooking.Core.csproj", "{22BDE1A0-F657-4883-8673-B8C5B8501EEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GymBooking.Front", "GymBooking.Front\GymBooking.Front.csproj", "{54D832D2-C28E-4599-9D4F-F5DC28B33985}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GymBooking.Front", "GymBooking.Front\GymBooking.Front.csproj", "{54D832D2-C28E-4599-9D4F-F5DC28B33985}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
