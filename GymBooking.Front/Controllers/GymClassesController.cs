@@ -31,9 +31,9 @@ namespace GymBooking.Front.Controllers
         // GET: GymClasses
         public async Task<IActionResult> Index()
         {
-            var userId = userManager.GetUserId(User);            
+            //var userId = userManager.GetUserId(User);            
 
-            var gymClasses=gymClassService.GetGymClassItems(userId)
+            var gymClasses=gymClassService.GetGymClassItems()
                 .From(DateTime.Now, true)
                 .Select(i=> new GymClassIndexItemModelView 
                 {
@@ -42,7 +42,7 @@ namespace GymBooking.Front.Controllers
                     StartTime = i.StartTime,
                     Duration = i.Duration,
                     Description = i.Description,
-                    IsBooked = i.IsBooked
+                    //IsBooked = i.IsBooked
                 });
 
             var model = new GymClassIndexModelView
@@ -59,9 +59,9 @@ namespace GymBooking.Front.Controllers
         {
             Debug.WriteLine("hello from history "+inputView.ViewHistory);
 
-            var userId = userManager.GetUserId(User);
+            //var userId = userManager.GetUserId(User);
 
-            var gymClasses = gymClassService.GetGymClassItems(userId)
+            var gymClasses = gymClassService.GetGymClassItems()
                 .From(DateTime.Now, !inputView.ViewHistory)
                 .Select(i => new GymClassIndexItemModelView
                 { 
@@ -70,7 +70,7 @@ namespace GymBooking.Front.Controllers
                     StartTime = i.StartTime,
                     Duration = i.Duration,
                     Description = i.Description,
-                    IsBooked = i.IsBooked
+                    //IsBooked = i.IsBooked
                 });
 
             var model = new GymClassIndexModelView
@@ -96,7 +96,7 @@ namespace GymBooking.Front.Controllers
                     StartTime = i.StartTime,
                     Duration = i.Duration,
                     Description = i.Description,
-                    IsBooked = i.IsBooked
+                    //IsBooked = i.IsBooked
                 });
 
             var model = new GymClassIndexModelView
@@ -122,7 +122,7 @@ namespace GymBooking.Front.Controllers
                     StartTime = i.StartTime,
                     Duration = i.Duration,
                     Description = i.Description,
-                    IsBooked = i.IsBooked
+                    //IsBooked = i.IsBooked
                 });
 
             var model = new GymClassIndexModelView

@@ -1,0 +1,25 @@
+﻿@model GymBooking.Front.Models.ViewModels.GymClasses.GymClassButtonsModelView
+
+@if (Model.IsEditAvailable)
+{
+    <a asp-action="Edit" asp-route-id="@Model.GymClassId" class="btn btn-primary">Edit</a>
+}
+@if (Model.IsDeleteAvailable)
+{
+    <a asp-action="Delete" asp-route-id="@Model.GymClassId" class="btn btn-danger">Delete</a>
+}
+@if (Model.IsBookingAvailable)
+{ 
+    @if(Model.IsBooked)
+    {
+        <a asp-action="BookingToggle" asp-route-id="@Model.GymClassId" class="btn btn-danger">unbook</a>
+    }
+    else
+    {
+        <a asp-action="BookingToggle" asp-route-id="@Model.GymClassId" class="btn btn-success">book</a>
+    }
+}
+@if (Model.IsDeleteAvailable)
+{
+    <a asp-action="Details" asp-route-id="@Model.GymClassId" class="btn btn-info">Details</a>
+}

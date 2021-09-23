@@ -1,0 +1,9 @@
+﻿@model IEnumerable<GymBooking.Front.Models.ViewModels.GymClasses.GymClassIndexItemModelView>
+
+
+
+@foreach (var item in Model)
+{
+    @await Html.PartialAsync("GymClassPartial", item)    
+    
+}

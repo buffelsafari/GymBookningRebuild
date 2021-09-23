@@ -13,7 +13,7 @@ namespace GymBooking.Core.Services.GymClassService
         public DateTime StartTime { get; set; }
         public TimeSpan Duration { get; set; }
         public string Description { get; set; }
-        public bool IsBooked { get; set; }
+        //public bool IsBooked { get; set; }
     }
 
     public class GymClassUserData  

@@ -1,0 +1,24 @@
+﻿@model GymBooking.Front.Models.ViewModels.GymClasses.GymClassIndexModelView
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="gymClassesId">
+        @await Html.PartialAsync("GymClassesPartial", @Model.GymClasses)
+    </tbody>
+</table>

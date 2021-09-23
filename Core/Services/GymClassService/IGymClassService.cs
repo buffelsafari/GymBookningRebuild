@@ -8,7 +8,7 @@ namespace GymBooking.Core.Services.GymClassService
 {
     public interface IGymClassService
     {
-        IQueryable<GymClassData> GetGymClassItems(string userId);
+        IQueryable<GymClassData> GetGymClassItems();
         IQueryable<GymClassUserData> GetBookedUsers(int gymClassId);
 
         IQueryable<GymClassData> GetBookedGymClassItems(string userId);

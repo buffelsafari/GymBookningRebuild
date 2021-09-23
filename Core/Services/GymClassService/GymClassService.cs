@@ -19,7 +19,7 @@ namespace GymBooking.Core.Services.GymClassService
             this.context = context;
         }
 
-        public IQueryable<GymClassData> GetGymClassItems(string userId)
+        public IQueryable<GymClassData> GetGymClassItems()
         {
             return context.GymClasses.Select(c => new GymClassData
                 {
@@ -29,7 +29,7 @@ namespace GymBooking.Core.Services.GymClassService
                     StartTime = c.StartTime,
                     Duration = c.Duration,
                     Description = c.Description,
-                    IsBooked = c.Users.Any(u => u.ApplicationUserId.Equals(userId))
+                    //IsBooked = c.Users.Any(u => u.ApplicationUserId.Equals(userId))
                 });
         }
 
@@ -44,7 +44,7 @@ namespace GymBooking.Core.Services.GymClassService
                     StartTime = c.StartTime,
                     Duration = c.Duration,
                     Description = c.Description,
-                    IsBooked = true
+                    //IsBooked = true
                 });
         }
 
