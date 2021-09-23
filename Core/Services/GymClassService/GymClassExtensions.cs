@@ -12,6 +12,11 @@ namespace GymBooking.Core.Services.GymClassService
         {
             return query.Where(c => !active || c.StartTime > from);
         }
+        public static IQueryable<GymClassData> To(this IQueryable<GymClassData> query, DateTime to, bool active)
+        {
+            return query.Where(c => !active || c.StartTime <= to);
+        }
+    
 
     }
 }

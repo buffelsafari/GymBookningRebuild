@@ -10,7 +10,9 @@ namespace GymBooking.Core.Services.GymClassService
     {
         IQueryable<GymClassData> GetGymClassItems(string userId);
         IQueryable<GymClassUserData> GetBookedUsers(int gymClassId);
-        
+
+        IQueryable<GymClassData> GetBookedGymClassItems(string userId);
+
         Task<GymClassData> GetGymClassAsync(int gymClassId);
         Task<bool> IsBooked(string userId, int gymClassId);
         Task<bool> Toggle(string userId, int gymClassId);

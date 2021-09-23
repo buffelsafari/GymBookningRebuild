@@ -83,6 +83,56 @@ namespace GymBooking.Front.Controllers
         }
 
 
+        public async Task<IActionResult> BookedClasses()
+        {
+            var userId = userManager.GetUserId(User);
+
+            var gymClasses = gymClassService.GetBookedGymClassItems(userId)
+                .From(DateTime.Now, true)
+                .Select(i => new GymClassIndexItemModelView
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    StartTime = i.StartTime,
+                    Duration = i.Duration,
+                    Description = i.Description,
+                    IsBooked = i.IsBooked
+                });
+
+            var model = new GymClassIndexModelView
+            {
+                ViewHistory = false,
+                GymClasses = await gymClasses.ToListAsync()
+            };
+
+            return View(model);
+        }
+
+
+        public async Task<IActionResult> BookedHistory()
+        {
+            var userId = userManager.GetUserId(User);
+
+            var gymClasses = gymClassService.GetBookedGymClassItems(userId)
+                .To(DateTime.Now, true)
+                .Select(i => new GymClassIndexItemModelView
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    StartTime = i.StartTime,
+                    Duration = i.Duration,
+                    Description = i.Description,
+                    IsBooked = i.IsBooked
+                });
+
+            var model = new GymClassIndexModelView
+            {
+                ViewHistory = false,
+                GymClasses = await gymClasses.ToListAsync()
+            };
+
+            return View(model);
+        }
 
 
 
@@ -262,24 +312,16 @@ namespace GymBooking.Front.Controllers
         // POST: GymClasses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id) // not to be used in this app
         {
-            //var gymClass = await context.GymClasses.FindAsync(id);
             
-            //context.GymClasses.Remove(gymClass);
-
             await gymClassService.RemoveAsync(id);
             
             await gymClassService.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        //private bool GymClassExists(int id)
-        //{
-        //    return context.GymClasses.Any(e => e.Id == id);
-        //}
-
-
+       
 
         [Authorize]
         public async Task<IActionResult> BookingToggle(int? id)
@@ -294,6 +336,7 @@ namespace GymBooking.Front.Controllers
 
             await gymClassService.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+                        
         }
 
     }

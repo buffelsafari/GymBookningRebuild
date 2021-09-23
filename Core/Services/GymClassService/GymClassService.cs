@@ -22,15 +22,30 @@ namespace GymBooking.Core.Services.GymClassService
         public IQueryable<GymClassData> GetGymClassItems(string userId)
         {
             return context.GymClasses.Select(c => new GymClassData
-            {
+                {
 
-                Id = c.Id,
-                Name = c.Name,
-                StartTime = c.StartTime,
-                Duration = c.Duration,
-                Description = c.Description,
-                IsBooked = c.Users.Any(u => u.ApplicationUserId.Equals(userId))
-            });
+                    Id = c.Id,
+                    Name = c.Name,
+                    StartTime = c.StartTime,
+                    Duration = c.Duration,
+                    Description = c.Description,
+                    IsBooked = c.Users.Any(u => u.ApplicationUserId.Equals(userId))
+                });
+        }
+
+        public IQueryable<GymClassData> GetBookedGymClassItems(string userId)
+        {
+            return context.GymClasses.Where(g => g.Users.Any(u => u.ApplicationUserId.Equals(userId)))
+                .Select(c => new GymClassData
+                {
+
+                    Id = c.Id,
+                    Name = c.Name,
+                    StartTime = c.StartTime,
+                    Duration = c.Duration,
+                    Description = c.Description,
+                    IsBooked = true
+                });
         }
 
         public async Task<bool> IsBooked(string userId, int gymClassId)
