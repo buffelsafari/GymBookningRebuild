@@ -28,6 +28,96 @@ namespace GymBooking.Front.Controllers
             this.gymClassService = gymClassService;
         }
 
+
+        //public async Task<ActionResult> GymClassTablePartial()
+        //{
+        //    Debug.WriteLine("Hello from my partial controller");
+
+        //    var gymClasses = gymClassService.GetGymClassItems()
+        //        .From(DateTime.Now, true)
+        //        .Select(i => new GymClassIndexItemModelView
+        //        {
+        //            Id = i.Id,
+        //            Name = i.Name,
+        //            StartTime = i.StartTime,
+        //            Duration = i.Duration,
+        //            Description = i.Description,
+        //            //IsBooked = i.IsBooked
+        //        });
+
+        //    var model = new GymClassIndexModelView
+        //    {
+        //        ViewHistory = false,
+        //        GymClasses = await gymClasses.ToListAsync()
+        //    };
+
+
+        //    return View("GymClassTablePartial",model);
+        //}
+
+        public async Task<ActionResult> OnAjaxButton(string buttonvalue) //todo clean, inject history
+        {
+            var itemCount = gymClassService.GetGymClassItems()
+                .From(DateTime.Now, true)
+                .Count();
+
+            Debug.WriteLine("ajax button pressed "+buttonvalue);
+            Debug.WriteLine("items counted " + itemCount+ "   hello div "+itemCount%3);
+
+            int offset = 0;
+            int pageSize = 3;// settings
+            
+
+            int result = 1;
+            if (int.TryParse(buttonvalue, out result))
+            {
+                Debug.WriteLine("int value " + result);
+                
+                offset = (result-1)*pageSize;
+                if (offset < 0)
+                {
+                    offset = 0;
+                }
+
+
+                
+            }
+            
+
+            var gymClasses = gymClassService.GetGymClassItems()
+                .From(DateTime.Now, true)
+                .Skip(offset)
+                .Take(pageSize)
+                .Select(i => new GymClassIndexItemModelView
+                {
+                    Id = i.Id,
+                    Name = i.Name,
+                    StartTime = i.StartTime,
+                    Duration = i.Duration,
+                    Description = i.Description,
+                    //IsBooked = i.IsBooked
+                });
+
+            var model = new GymClassIndexModelView
+            {
+                ViewHistory = false,
+                NumberOfPages = itemCount/pageSize + (itemCount%pageSize==0 ? 0:1),
+                CurrentPage = result,
+                GymClasses = await gymClasses.ToListAsync()
+            };
+
+
+            return PartialView("GymClassTablePartial", model);
+
+        }
+
+
+
+
+
+
+
+
         // GET: GymClasses
         public async Task<IActionResult> Index()
         {

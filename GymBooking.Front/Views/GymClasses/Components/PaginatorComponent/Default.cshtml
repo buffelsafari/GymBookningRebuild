@@ -1,0 +1,101 @@
+﻿@model GymBooking.Front.Models.ViewModels.PaginatorModelView
+
+<style>
+    .pagi {
+    }
+
+</style>
+
+<ul value="@(Model.CurrentPage)" class="pagination pagination justify-content-center">
+    @if (Model.CurrentPage == 1)
+    {
+        <li class="page-item disabled">
+            <button class="page-link" value="@(Model.CurrentPage-1)">Previous</button>
+        </li>
+    }
+    else
+    {
+        <li class="page-item">
+            <button class="page-link pagi" value="@(Model.CurrentPage-1)">Previous</button>
+        </li>
+    }
+
+
+    @for (int i = 1; i <= Model.NumberOfPages; i++)
+    {
+        if (i == Model.CurrentPage)
+        {
+            <li class="page-item active">
+                <button class="page-link" value="@i">@i</button>
+            </li>
+        }
+        else
+        {
+            <li class="page-item">
+                <button class="page-link pagi" value="@i">@i</button>
+            </li>
+        }
+    }
+
+    @if (Model.CurrentPage == Model.NumberOfPages)
+    {
+        <li class="page-item disabled">
+            <button class="page-link" value="@(Model.CurrentPage+1)">Next</button>
+        </li>
+    }
+    else
+    {
+        <li class="page-item">
+            <button class="page-link pagi" value="@(Model.CurrentPage+1)">Next</button>
+        </li>
+    }
+
+    
+</ul>
+
+
+
+
+<script>
+
+    
+
+
+    let d = document.getElementsByClassName("pagi");
+    for (let i = 0; i < d.length; i++) {
+        d[i].addEventListener("click", func);
+    }
+
+
+
+    function func(event) {
+
+             
+
+
+        $.ajax({
+            type: "GET",
+            url: "/GymClasses/OnAjaxButton",
+            data: { buttonvalue: event.target.value },
+            cache: false,
+            success: function (result) {
+
+                console.log(event.target.value);
+                document.getElementById("gymClassesTableId").innerHTML = result;
+
+                // re add listeners
+                let d = document.getElementsByClassName("pagi");
+                for (let i = 0; i < d.length; i++) {
+                    d[i].addEventListener("click", func);
+                }
+
+            }
+        });
+
+    }
+
+
+
+</script>
+
+

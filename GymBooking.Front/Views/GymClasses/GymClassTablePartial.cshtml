@@ -22,3 +22,16 @@
         @await Html.PartialAsync("GymClassesPartial", @Model.GymClasses)
     </tbody>
 </table>
+
+
+
+
+
+
+@await Component.InvokeAsync("PaginatorComponent", new { numberOfPages = Model.NumberOfPages, currentPage=Model.CurrentPage })
+
+
+
+@Html.ActionLink("hello", "GymClassTablePartial")
+
+

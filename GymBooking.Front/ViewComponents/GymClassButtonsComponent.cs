@@ -36,7 +36,7 @@ namespace GymBooking.Front.ViewComponents
             bool isDetailsAvailable = false;
 
 
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity.IsAuthenticated)  // change to role member
             {
                 if (time>DateTime.Now) // todo test date
                 {
@@ -55,8 +55,7 @@ namespace GymBooking.Front.ViewComponents
             }
 
             
-
-            Debug.WriteLine("hello from comonent "+this.UserClaimsPrincipal.Claims.FirstOrDefault());
+            
             var model = new GymClassButtonsModelView
             {
                 GymClassId = gymClassId,
