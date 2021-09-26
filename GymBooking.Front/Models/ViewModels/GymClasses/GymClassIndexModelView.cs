@@ -8,6 +8,7 @@ namespace GymBooking.Front.Models.ViewModels.GymClasses
     
     public class GymClassIndexModelView
     {
+        public string ActionEvent { get; set; }
         public bool ViewHistory { get; set; }
         public int NumberOfPages { get; set; }
         public int CurrentPage { get; set; }

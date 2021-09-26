@@ -15,78 +15,29 @@ using System.Diagnostics;
 
 namespace GymBooking.Front.Controllers
 {
-   
+
 
     public class GymClassesController : Controller
-    {        
+    {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IGymClassService gymClassService;
 
         public GymClassesController(UserManager<ApplicationUser> userManager, IGymClassService gymClassService)
-        {            
+        {
             this.userManager = userManager;
             this.gymClassService = gymClassService;
         }
 
 
-        //public async Task<ActionResult> GymClassTablePartial()
-        //{
-        //    Debug.WriteLine("Hello from my partial controller");
 
-        //    var gymClasses = gymClassService.GetGymClassItems()
-        //        .From(DateTime.Now, true)
-        //        .Select(i => new GymClassIndexItemModelView
-        //        {
-        //            Id = i.Id,
-        //            Name = i.Name,
-        //            StartTime = i.StartTime,
-        //            Duration = i.Duration,
-        //            Description = i.Description,
-        //            //IsBooked = i.IsBooked
-        //        });
-
-        //    var model = new GymClassIndexModelView
-        //    {
-        //        ViewHistory = false,
-        //        GymClasses = await gymClasses.ToListAsync()
-        //    };
-
-
-        //    return View("GymClassTablePartial",model);
-        //}
-
-        public async Task<ActionResult> OnAjaxButton(string buttonvalue) //todo clean, inject history
+        private async Task<GymClassIndexModelView> GetIndexModelView(IQueryable<GymClassData> baseQuery, int pageSize, int currentPage, bool viewHistory, string actionEvent)
         {
-            var itemCount = gymClassService.GetGymClassItems()
-                .From(DateTime.Now, true)
+
+            var itemCount = baseQuery
                 .Count();
 
-            Debug.WriteLine("ajax button pressed "+buttonvalue);
-            Debug.WriteLine("items counted " + itemCount+ "   hello div "+itemCount%3);
-
-            int offset = 0;
-            int pageSize = 3;// settings
-            
-
-            int result = 1;
-            if (int.TryParse(buttonvalue, out result))
-            {
-                Debug.WriteLine("int value " + result);
-                
-                offset = (result-1)*pageSize;
-                if (offset < 0)
-                {
-                    offset = 0;
-                }
-
-
-                
-            }
-            
-
-            var gymClasses = gymClassService.GetGymClassItems()
-                .From(DateTime.Now, true)
-                .Skip(offset)
+            var gymClasses = baseQuery
+                .Skip(pageSize * (currentPage - 1))
                 .Take(pageSize)
                 .Select(i => new GymClassIndexItemModelView
                 {
@@ -98,128 +49,138 @@ namespace GymBooking.Front.Controllers
                     //IsBooked = i.IsBooked
                 });
 
-            var model = new GymClassIndexModelView
+            return new GymClassIndexModelView
             {
-                ViewHistory = false,
-                NumberOfPages = itemCount/pageSize + (itemCount%pageSize==0 ? 0:1),
-                CurrentPage = result,
+                ActionEvent = actionEvent,
+                ViewHistory = viewHistory,
+                NumberOfPages = itemCount / pageSize + (itemCount % pageSize == 0 ? 0 : 1),
+                CurrentPage = currentPage,
                 GymClasses = await gymClasses.ToListAsync()
             };
 
+        }
+
+
+
+        public async Task<ActionResult> OnIndexChange(string buttonValue, string viewHistory)
+        {
+            bool vHistory = false;
+            bool.TryParse(viewHistory, out vHistory);
+            int pageSize = 3;// settings
+            int result = 1;
+            if (int.TryParse(buttonValue, out result))
+            {
+                result = result < 1 ? 1 : result;
+            }
+            else
+            {
+                result = 1;
+            }
+
+            var baseQuery = gymClassService.GetGymClassItems()
+                .From(DateTime.Now, !vHistory);
+
+            var model = await GetIndexModelView(baseQuery, pageSize, result, vHistory, "OnIndexChange");
 
             return PartialView("GymClassTablePartial", model);
 
         }
 
-
-
-
-
-
-
-
         // GET: GymClasses
         public async Task<IActionResult> Index()
         {
-            //var userId = userManager.GetUserId(User);            
+            var baseQuery = gymClassService.GetGymClassItems()
+                .From(DateTime.Now, true);
 
-            var gymClasses=gymClassService.GetGymClassItems()
-                .From(DateTime.Now, true)
-                .Select(i=> new GymClassIndexItemModelView 
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    StartTime = i.StartTime,
-                    Duration = i.Duration,
-                    Description = i.Description,
-                    //IsBooked = i.IsBooked
-                });
+            var model = await GetIndexModelView(baseQuery, 3, 1, false, "OnIndexChange");
 
-            var model = new GymClassIndexModelView
-            {
-                ViewHistory = false,
-                GymClasses = await gymClasses.ToListAsync()
-            };
-
-            return View(model);            
+            return View(model);
         }
 
 
-        public async Task<IActionResult> History(GymClassIndexModelView inputView)
+
+        [Authorize(Roles ="Member")]
+        
+        public async Task<ActionResult> OnBookedClassesChange(string buttonValue, string viewHistory)
         {
-            Debug.WriteLine("hello from history "+inputView.ViewHistory);
-
-            //var userId = userManager.GetUserId(User);
-
-            var gymClasses = gymClassService.GetGymClassItems()
-                .From(DateTime.Now, !inputView.ViewHistory)
-                .Select(i => new GymClassIndexItemModelView
-                { 
-                    Id = i.Id,
-                    Name = i.Name,
-                    StartTime = i.StartTime,
-                    Duration = i.Duration,
-                    Description = i.Description,
-                    //IsBooked = i.IsBooked
-                });
-
-            var model = new GymClassIndexModelView
+            bool vHistory = false;
+            bool.TryParse(viewHistory, out vHistory);
+            int pageSize = 3;// settings
+            int result = 1;
+            if (int.TryParse(buttonValue, out result))
             {
-                ViewHistory = inputView.ViewHistory,
-                GymClasses = await gymClasses.ToListAsync()
-            };
+                result = result < 1 ? 1 : result;
+            }
+            else
+            {
+                result = 1;
+            }
 
-            return View(nameof(Index), model);
+            var userId = userManager.GetUserId(User);
+
+            var baseQuery = gymClassService.GetBookedGymClassItems(userId)
+               .From(DateTime.Now, true);
+
+            var model = await GetIndexModelView(baseQuery, pageSize, result, vHistory, "OnBookedClassesChange");
+
+            return PartialView("GymClassTablePartial", model);
+
         }
 
-
+        [Authorize(Roles ="Member")]        
         public async Task<IActionResult> BookedClasses()
         {
+           
             var userId = userManager.GetUserId(User);
 
-            var gymClasses = gymClassService.GetBookedGymClassItems(userId)
-                .From(DateTime.Now, true)
-                .Select(i => new GymClassIndexItemModelView
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    StartTime = i.StartTime,
-                    Duration = i.Duration,
-                    Description = i.Description,
-                    //IsBooked = i.IsBooked
-                });
+            var baseQuery = gymClassService.GetBookedGymClassItems(userId)
+               .From(DateTime.Now, true);
 
-            var model = new GymClassIndexModelView
-            {
-                ViewHistory = false,
-                GymClasses = await gymClasses.ToListAsync()
-            };
+            var model = await GetIndexModelView(baseQuery, 3, 1, false, "OnBookedClassesChange");
+
 
             return View(model);
         }
 
 
+        [Authorize(Roles ="Member")]
+        public async Task<ActionResult> OnBookedHistoryChange(string buttonValue, string viewHistory)
+        {
+            bool vHistory = false;
+            bool.TryParse(viewHistory, out vHistory);
+            int pageSize = 3;// settings
+            int result = 1;
+            if (int.TryParse(buttonValue, out result))
+            {
+                result = result < 1 ? 1 : result;
+            }
+            else
+            {
+                result = 1;
+            }
+
+            var userId = userManager.GetUserId(User);
+
+            var baseQuery = gymClassService.GetBookedGymClassItems(userId)
+                .To(DateTime.Now, true);
+               
+
+            var model = await GetIndexModelView(baseQuery, pageSize, result, vHistory, "OnBookedHistoryChange");
+
+            return PartialView("GymClassTablePartial", model);
+
+        }
+
+        [Authorize(Roles ="Member")]
         public async Task<IActionResult> BookedHistory()
         {
+            
             var userId = userManager.GetUserId(User);
 
-            var gymClasses = gymClassService.GetBookedGymClassItems(userId)
-                .To(DateTime.Now, true)
-                .Select(i => new GymClassIndexItemModelView
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    StartTime = i.StartTime,
-                    Duration = i.Duration,
-                    Description = i.Description,
-                    //IsBooked = i.IsBooked
-                });
+            var baseQuery = gymClassService.GetBookedGymClassItems(userId)
+                .To(DateTime.Now, true);
 
-            var model = new GymClassIndexModelView
-            {
-                ViewHistory = false,
-                GymClasses = await gymClasses.ToListAsync()
-            };
+            var model = await GetIndexModelView(baseQuery, 3, 1, false, "OnBookedHistoryChange");
 
             return View(model);
         }
@@ -229,7 +190,7 @@ namespace GymBooking.Front.Controllers
 
 
 
-
+        [Authorize(Roles ="Member")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -277,6 +238,7 @@ namespace GymBooking.Front.Controllers
 
 
         // GET: GymClasses/Create
+        [Authorize(Roles ="Admin")]
         public IActionResult Create()
         {
             return View();
@@ -287,6 +249,7 @@ namespace GymBooking.Front.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create(GymClassCreateModelView modelView)
         {
             if (ModelState.IsValid)
@@ -305,6 +268,7 @@ namespace GymBooking.Front.Controllers
         }
 
         // GET: GymClasses/Edit/5
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -335,6 +299,7 @@ namespace GymBooking.Front.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Edit(int id, GymClassUpdateModelView modelView)
         {
             if (id != modelView.Id)
@@ -373,6 +338,7 @@ namespace GymBooking.Front.Controllers
         }
 
         // GET: GymClasses/Delete/5
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -402,6 +368,7 @@ namespace GymBooking.Front.Controllers
         // POST: GymClasses/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id) // not to be used in this app
         {
             
@@ -413,7 +380,7 @@ namespace GymBooking.Front.Controllers
 
        
 
-        [Authorize]
+        [Authorize(Roles ="Member")]
         public async Task<IActionResult> BookingToggle(int? id)
         {
             if (id == null)

@@ -46,6 +46,14 @@ namespace GymBooking.Front.Areas.Identity.Pages.Account
 
         public class InputModel
         {
+            [Required]            
+            [Display(Name = "FirstName")]
+            public string FirstName { get; set; }
+            [Required]
+            [Display(Name = "LastName")]
+            public string LastName { get; set; }
+
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
@@ -75,8 +83,17 @@ namespace GymBooking.Front.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
+                var user = new ApplicationUser 
+                { 
+                    UserName = Input.Email, 
+                    Email = Input.Email,
+                    FirstName=Input.FirstName,
+                    LastName=Input.LastName,                    
+                };
+                
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
+                await _userManager.AddToRoleAsync(user, "Member");   // todo test result
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");

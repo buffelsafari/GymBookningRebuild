@@ -1,5 +1,7 @@
 ﻿@model GymBooking.Front.Models.ViewModels.GymClasses.GymClassIndexModelView
 
+@await Component.InvokeAsync("PaginatorComponent", new { numberOfPages = Model.NumberOfPages, currentPage = Model.CurrentPage })
+
 <table class="table">
     <thead>
         <tr>
@@ -24,14 +26,15 @@
 </table>
 
 
+@await Component.InvokeAsync("PaginatorComponent", new { numberOfPages = Model.NumberOfPages, currentPage = Model.CurrentPage })
+
+<input id="viewHistoryId" asp-for="@Model.ViewHistory" type="hidden">
+
+<input id="actionEventId" asp-for="@Model.ActionEvent" type="hidden">
 
 
 
+<script>
+ 
 
-@await Component.InvokeAsync("PaginatorComponent", new { numberOfPages = Model.NumberOfPages, currentPage=Model.CurrentPage })
-
-
-
-@Html.ActionLink("hello", "GymClassTablePartial")
-
-
+</script>

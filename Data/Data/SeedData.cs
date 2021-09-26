@@ -31,7 +31,7 @@ namespace GymBooking.Data.Data
             userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
             if (userManager is null) throw new NullReferenceException(nameof(UserManager<ApplicationUser>));
 
-            var roleNames = new[] { "Student", "Admin" };
+            var roleNames = new[] { "Member", "Admin" };
             var adminEmail = "admin@gym.se";
 
             var gymClasses = GetGymClasses();

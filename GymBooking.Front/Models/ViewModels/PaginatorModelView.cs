@@ -10,5 +10,7 @@ namespace GymBooking.Front.Models.ViewModels
         public int NumberOfPages { get; set; }
         public int CurrentPage { get; set; }
 
+        
+
     }
 }

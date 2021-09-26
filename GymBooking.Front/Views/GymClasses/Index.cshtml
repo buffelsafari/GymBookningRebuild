@@ -11,9 +11,9 @@
 </p>
 
 
-<form asp-action="History">
-    <input id="historyCheckBox" type="checkbox" asp-for="ViewHistory" onchange="javascript:this.form.submit()">
-    <label for="historyCheckBox">View History</label>
+<form>
+    <input id="historyCheckBoxId" type="checkbox" asp-for=@Model.ViewHistory >
+    <label for="historyCheckBoxId">View History</label>
 </form>
 
 <div id="gymClassesTableId">

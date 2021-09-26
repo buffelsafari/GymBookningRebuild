@@ -16,10 +16,9 @@ namespace GymBooking.Front.ViewComponents
             var model = new PaginatorModelView
             {                
                 NumberOfPages=numberOfPages,
-                CurrentPage=currentPage,
-
+                CurrentPage=currentPage,                
             };
-            Debug.WriteLine("Hello from paginator c#"+numberOfPages);
+            
             return View(model);
         }
     }

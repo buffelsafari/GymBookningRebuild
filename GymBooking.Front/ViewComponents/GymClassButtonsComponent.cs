@@ -36,13 +36,15 @@ namespace GymBooking.Front.ViewComponents
             bool isDetailsAvailable = false;
 
 
-            if (User.Identity.IsAuthenticated)  // change to role member
+            if (User.IsInRole("Member"))  
             {
                 if (time>DateTime.Now) // todo test date
                 {
+                    
                     isBookingAvailable = true;
                     var userId = userManager.GetUserId(UserClaimsPrincipal);
-                    isBooked = await gymClassService.IsBooked(userId, gymClassId);                    
+                    isBooked = await gymClassService.IsBooked(userId, gymClassId);
+                    
                 }
                 if (User.IsInRole("Admin"))
                 {

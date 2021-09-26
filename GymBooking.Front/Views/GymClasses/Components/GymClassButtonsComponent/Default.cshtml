@@ -19,7 +19,7 @@
         <a asp-action="BookingToggle" asp-route-id="@Model.GymClassId" class="btn btn-success">book</a>
     }
 }
-@if (Model.IsDeleteAvailable)
+@if (Model.IsDetailsAvailable)
 {
     <a asp-action="Details" asp-route-id="@Model.GymClassId" class="btn btn-info">Details</a>
 }
