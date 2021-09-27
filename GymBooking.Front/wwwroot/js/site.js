@@ -12,7 +12,10 @@ if (document.getElementById("historyCheckBoxId")!=null) {
     let actionEvent = document.getElementById("actionEventId").value;
 
 
-
+let  b = document.getElementsByClassName("booking");
+for (let i = 0; i < b.length; i++) {
+    b[i].addEventListener("click", onBooking);
+}
 
 
 
@@ -20,6 +23,8 @@ let d = document.getElementsByClassName("pagi");
 for (let i = 0; i < d.length; i++) {
     d[i].addEventListener("click", onPaginator);
 }
+
+
 
 function onPaginator(event) {
 
@@ -36,10 +41,16 @@ function onPaginator(event) {
             console.log(event.target.value);
             document.getElementById("gymClassesTableId").innerHTML = result;
 
-            // re add listeners
+            // re add paginator listeners
             let d = document.getElementsByClassName("pagi");
             for (let i = 0; i < d.length; i++) {
                 d[i].addEventListener("click", onPaginator);
+            }
+
+            // re add booking listeners
+            let b = document.getElementsByClassName("booking");
+            for (let i = 0; i < b.length; i++) {
+                b[i].addEventListener("click", onBooking);
             }
 
         }
@@ -56,7 +67,7 @@ function onPaginator(event) {
 
 function onHistoryCheckBox(event) {
 
-    
+
 
     $.ajax({
         type: "GET",
@@ -65,18 +76,57 @@ function onHistoryCheckBox(event) {
         cache: false,
         success: function (result) {
 
-            console.log("checkbox from java:"+event.target.checked);
+            console.log("checkbox from java:" + event.target.checked);
             document.getElementById("gymClassesTableId").innerHTML = result;
 
-            // re add listeners
+            // re add paginator listeners
             let d = document.getElementsByClassName("pagi");
             for (let i = 0; i < d.length; i++) {
                 d[i].addEventListener("click", onPaginator);
             }
 
+            // re add booking listeners
+            let b = document.getElementsByClassName("booking");
+            for (let i = 0; i < b.length; i++) {
+                b[i].addEventListener("click", onBooking);
             }
 
         }
+
+    
+    });
+
+}
+
+function onBooking(event)
+{
+    $.ajax({
+        type: "GET",
+        url: "/GymClasses/OnBooking",
+        data: { id: event.target.value },
+        cache: false,
+        success: function (result) {
+
+
+            console.log(event.target.value);
+
+            let dest = document.getElementById("destroyOnBookingId").value;
+            console.log(dest)
+            if (dest==true) {
+                document.getElementById("gymClass " + event.target.value).innerHTML = "";
+            }
+            else {
+                document.getElementById("gymClass " + event.target.value).innerHTML = result;
+            }
+            // re add booking listeners
+            let b = document.getElementsByClassName("booking");
+            for (let i = 0; i < b.length; i++) {
+                b[i].addEventListener("click", onBooking);
+            }
+
+        }
+
+    }
     );
 
 }

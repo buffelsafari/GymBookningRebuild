@@ -4,8 +4,9 @@
 
 @foreach (var item in Model)
 {
+    <tr id="gymClass @item.Id">
     @await Html.PartialAsync("GymClassPartial", item)    
-    
+    </tr>
 }
 
 

@@ -12,14 +12,15 @@
 { 
     @if(Model.IsBooked)
     {
-        <a asp-action="BookingToggle" asp-route-id="@Model.GymClassId" class="btn btn-danger">unbook</a>
+        <button value=@Model.GymClassId class="booking btn btn-danger">unbook</button>
     }
     else
     {
-        <a asp-action="BookingToggle" asp-route-id="@Model.GymClassId" class="btn btn-success">book</a>
+        <button value=@Model.GymClassId class="booking btn btn-success">book</button>
     }
 }
 @if (Model.IsDetailsAvailable)
 {
     <a asp-action="Details" asp-route-id="@Model.GymClassId" class="btn btn-info">Details</a>
 }
+

@@ -1,6 +1,6 @@
 ﻿@model GymBooking.Front.Models.ViewModels.GymClasses.GymClassIndexItemModelView
+    
 
-<tr>
     <td>
         @Html.DisplayFor(item => item.Name)
     </td>
@@ -14,9 +14,10 @@
         @Html.DisplayFor(item => item.Description)
     </td>
     <td>
-        @await Component.InvokeAsync("GymClassButtonsComponent", new { time=Model.StartTime, gymClassId = Model.Id })
-               
+        @await Component.InvokeAsync("GymClassButtonsComponent", new { time = Model.StartTime, gymClassId = Model.Id })
+
 
     </td>
-</tr>
+
+    
 

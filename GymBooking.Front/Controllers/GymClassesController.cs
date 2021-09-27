@@ -30,6 +30,36 @@ namespace GymBooking.Front.Controllers
 
 
 
+
+        public async Task<ActionResult> OnBooking(int id)
+        {
+            Debug.WriteLine("Hello from test in controller "+id);
+
+            
+
+            var userId = userManager.GetUserId(User);
+
+            await gymClassService.Toggle(userId, (int)id);
+
+            await gymClassService.SaveChangesAsync();
+
+            var gymClass = await gymClassService.GetGymClassAsync(id);
+            var model = new GymClassIndexItemModelView
+            {
+                Id=gymClass.Id,
+                Name=gymClass.Name,
+                StartTime=gymClass.StartTime,
+                Duration=gymClass.Duration,
+                Description=gymClass.Description
+            };
+
+            return PartialView("GymClassPartial", model);
+        }
+
+
+
+
+
         private async Task<GymClassIndexModelView> GetIndexModelView(IQueryable<GymClassData> baseQuery, int pageSize, int currentPage, bool viewHistory, string actionEvent)
         {
 
